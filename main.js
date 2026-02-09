@@ -264,21 +264,27 @@ function validateStep2() {
   let ok = true;
   participantsData = [];
 
+  // Require each participant name to include at least two words (nome e sobrenome)
   let idx = 1;
   for (const input of inputs) {
-    const name = input.value.trim();
-    if (!name) {
+    const raw = input.value.trim();
+    // Split by whitespace and filter out empty segments
+    const parts = raw.split(/\s+/).filter(Boolean);
+    const hasFullName = parts.length >= 2 && parts[0].length > 0 && parts[parts.length - 1].length > 0;
+
+    if (!raw || !hasFullName) {
       ok = false;
     }
+
     participantsData.push({
       index: idx,
-      name
+      name: raw
     });
     idx += 1;
   }
 
   if (!ok) {
-    setFieldError("participants", "Informe o nome de todos os participantes.");
+    setFieldError("participants", "Informe nome e sobrenome para todos os participantes.");
   }
   return ok;
 }
@@ -588,6 +594,9 @@ async function handlePayPix() {
   selectors.payPixBtn.textContent = "Gerando PIX...";
   selectors.paymentStatus.hidden = false;
   selectors.paymentStatusLabel.textContent = "Gerando pedido de pagamento...";
+
+  // track whether the sale flow completed successfully so we don't re-enable the pay button
+  let saleCompleted = false;
 
   try {
     // Call backend endpoint to create PagBank PIX order
@@ -904,6 +913,11 @@ async function handlePayPix() {
       // non-fatal
     }
 
+    // mark successful completion and set final button state
+    saleCompleted = true;
+    selectors.payPixBtn.disabled = true;
+    selectors.payPixBtn.textContent = "Solicitação de Compra Efetuada";
+
     updateSummary();
     updateProgress(3);
   } catch (err) {
@@ -914,8 +928,11 @@ async function handlePayPix() {
         ? `Erro: ${err.message}`
         : "Não foi possível gerar o PIX. Tente novamente em instantes.";
   } finally {
-    selectors.payPixBtn.disabled = false;
-    selectors.payPixBtn.textContent = "Pagar via PIX";
+    // only re-enable the pay button when the flow did NOT complete successfully
+    if (!saleCompleted) {
+      selectors.payPixBtn.disabled = false;
+      selectors.payPixBtn.textContent = "Pagar via PIX";
+    }
   }
 }
 
@@ -1360,3 +1377,39 @@ if ("serviceWorker" in navigator) {
 }
 
 init();
+
+// Support WhatsApp button behavior
+(function bindSupportWhatsApp() {
+  function openWhatsAppHelp() {
+    const phone = "5522997851781"; // formatted international without plus
+    const text = "Tenho uma dúvida! Você pode me ajudar?";
+    // Prefer whatsapp:// scheme for native app, fallback to web URL
+    const appUrl = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(text)}`;
+    const webUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
+
+    // Try to open native app; if blocked, open web fallback
+    const win = window.open(appUrl, "_blank");
+    // If popup was blocked or scheme failed, fallback after short timeout
+    setTimeout(() => {
+      try {
+        // If window couldn't be opened or remains about:blank, open web URL
+        if (!win || win.closed || win.location.href === "about:blank") {
+          window.open(webUrl, "_blank");
+        }
+      } catch {
+        // opening app scheme may throw; ensure web fallback
+        window.open(webUrl, "_blank");
+      }
+    }, 500);
+  }
+
+  // Attach listener when DOM is ready
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!target) return;
+    if (target.id === "support-whatsapp-btn" || target.closest?.("#support-whatsapp-btn")) {
+      e.preventDefault();
+      openWhatsAppHelp();
+    }
+  });
+})();
