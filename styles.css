@@ -1,0 +1,671 @@
+:root {
+  --bg: #f5f5f7;
+  --card-bg: #ffffff;
+  --accent: #1f8f5f;
+  --accent-soft: #e9f7ef;
+  --accent-strong: #16734b;
+  --text-main: #1f2933;
+  --text-muted: #6b7280;
+  --border-subtle: #e6e9ed;
+  --error: #d93025;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --elevation-1: 0 6px 18px rgba(18, 24, 31, 0.06);
+  --elevation-2: 0 10px 30px rgba(18, 24, 31, 0.09);
+  --elevation-3: 0 18px 40px rgba(18, 24, 31, 0.12);
+  --space-xs: 6px;
+  --space-sm: 10px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --control-height: 52px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page {
+  min-height: 100vh;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* HEADER / EVENTO */
+
+.event-header {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+}
+
+.event-banner {
+  position: relative;
+  height: 120px;
+  background: linear-gradient(135deg, #0f1724 0%, #25404a 45%, #0ea5a9 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: var(--space-sm);
+}
+
+.event-badge {
+  background: rgba(15, 23, 42, 0.9);
+  color: #f9fafb;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 6px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.event-info {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.event-title {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.event-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.price-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.price-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.event-description {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* PROGRESSO */
+
+.steps-progress {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-md);
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.step-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: #ffffff;
+}
+
+.step-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.step-indicator.active .step-circle {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.step-indicator.completed .step-circle {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.step-indicator.active .step-label,
+.step-indicator.completed .step-label {
+  color: var(--accent-strong);
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border-subtle);
+}
+
+/* FLOW / CARDS */
+
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding-bottom: var(--space-sm);
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-1);
+  padding: var(--space-sm);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.card-step {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.card-title {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.step-card.disabled {
+  opacity: 0.6;
+}
+
+.step-card.disabled .card-body {
+  pointer-events: none;
+}
+
+/* FIELDS */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.field input,
+.field textarea {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  padding: 12px 14px;
+  height: var(--control-height);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease, transform 0.08s ease;
+  background: #fff;
+}
+
+.field textarea {
+  height: auto;
+  min-height: 88px;
+  resize: none;
+  padding: 12px;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.08);
+  transform: translateY(-1px);
+}
+
+.field-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.field-error {
+  min-height: 16px;
+  font-size: 12px;
+  color: var(--error);
+}
+
+/* QUANTIDADE */
+
+.qty-label {
+  text-align: center;
+  display: block;
+  margin-bottom: var(--space-sm); /* use standard spacing like other fields */
+  font-weight: 700;
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* center horizontally within its container */
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  background: #fbfdfe;
+  padding: 6px;
+}
+
+.qty-btn {
+  width: 60px;
+  height: var(--control-height);
+  border: none;
+  background: transparent;
+  font-size: 26px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.qty-btn:active {
+  background: rgba(18, 24, 31, 0.04);
+}
+
+.qty-selector input {
+  width: 88px;
+  height: var(--control-height);
+  text-align: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* PARTICIPANTES */
+
+.participants {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.participant-item {
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: #fbfdfe;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Make participant name input span the available width with comfortable side padding and larger touch target */
+.participant-item input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  background: #fff;
+  outline: none;
+  height: 48px;
+}
+
+.participant-item input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.06);
+}
+
+.participant-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+/* SUMÁRIO */
+
+.summary {
+  border-radius: var(--radius-md);
+  background: #fbfdfe;
+  border: 1px solid var(--border-subtle);
+  padding: 14px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.summary-row span:first-child {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.summary-row span:last-child {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+/* Emphasize unit price and total in the summary */
+.summary-row .summary-unit,
+.summary-row .summary-total-value {}
+
+/* Larger, bold total block */
+.summary-total {
+  border-top: 1px dashed var(--border-subtle);
+  padding-top: 10px;
+  margin-top: 6px;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--accent-strong);
+}
+
+/* BOTÕES */
+
+.primary-btn {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 12px;
+  border: none;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  box-shadow: var(--elevation-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.18);
+}
+
+.primary-btn[disabled] {
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+/* Cyan variant for copy action: similar weight/shape to primary but in cyan/teal */
+.cyan-btn {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  box-shadow: 0 10px 20px rgba(3, 105, 122, 0.12);
+  color: #ffffff;
+}
+
+.cyan-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 10px rgba(3, 105, 122, 0.12);
+}
+
+.secondary-btn {
+  margin-top: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  padding: 10px 12px;
+  font-size: 13px;
+  background: #ffffff;
+}
+
+/* PAGAMENTO / PIX */
+
+.payment-status {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.status-line span {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+/* Compact, clean PIX card */
+.pix-section {
+  margin-top: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  padding: 14px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--elevation-1);
+}
+
+.pix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pix-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.pix-countdown {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  padding: 8px 12px;
+  border-radius: 10px;
+  min-width: 100px;
+  text-align: center;
+}
+
+/* Body containing the copy area and actions */
+.pix-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pix-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-align: center;
+}
+
+.pix-copyarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px dashed var(--border-subtle);
+  padding: 14px;
+  font-weight: 800;
+  font-size: 14px;
+  text-align: center;
+  resize: none;
+  background: var(--accent-soft);
+  color: var(--text-main);
+  outline: none;
+}
+
+/* Actions row */
+.pix-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.pix-actions .secondary-btn {
+  min-width: 140px;
+  padding: 12px 14px;
+  font-weight: 800;
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* Instruction text */
+.pix-instructions {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  font-weight: 700;
+}
+
+/* subtle waiting hint */
+.pix-wait {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* SUCESSO / INGRESSOS */
+
+.success-section {
+  margin-top: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid #c6f3d1;
+  background: #f3fff4;
+  padding: 12px;
+  box-shadow: var(--elevation-1);
+}
+
+.success-title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.success-text {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.tickets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.ticket-item {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 10px;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 10px;
+  border: 1px solid #c6f3d1;
+  align-items: center;
+  box-shadow: var(--elevation-1);
+}
+
+.ticket-info {
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ticket-info strong {
+  font-size: 14px;
+}
+
+.ticket-qrcode {
+  background: #fbfdfe;
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticket-qrcode canvas {
+  width: 100%;
+  height: auto;
+}
+
+/* RESPONSIVO BÁSICO */
+
+@media (min-width: 540px) {
+  .page {
+    padding: var(--space-lg);
+    max-width: 680px;
+  }
+
+  .event-banner {
+    height: 160px;
+  }
+}

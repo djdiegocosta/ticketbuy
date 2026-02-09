@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>TicketBuy - Comprar Ingressos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "qrcode": "https://esm.sh/qrcode",
+        "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js"
+      }
+    }
+  </script>
+
+  <!-- PWA / Standalone support -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1f8f5f" />
+  <!-- Android -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <!-- iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <!-- Provide a short name and display hints for standalone -->
+  <meta name="apple-mobile-web-app-title" content="TicketBuy" />
+  <meta name="application-name" content="TicketBuy" />
+</head>
+<body>
+  <div class="page">
+    <!-- TOPO / EVENTO -->
+    <header class="event-header">
+      <div class="event-banner">
+        <!-- Banner simples; troque o background-image via CSS se quiser usar imagem real -->
+        <div class="event-badge">TicketBuy</div>
+      </div>
+      <div class="event-info">
+        <h1 class="event-title" id="event-title">Em Breve um Evento da DC</h1>
+        <div class="event-meta">
+          <span id="event-datetime">25/03/2026 • 20h00</span>
+          <span id="event-location">Clube União, Itaocara - RJ</span>
+        </div>
+        <div class="event-price">
+          <span class="price-label">Ingresso</span>
+          <span class="price-value" id="ticket-unit-price" data-price="120.00">
+            R$ 25,00
+          </span>
+        </div>
+        <p class="event-description" id="event-description"></p>
+      </div>
+
+      <!-- Indicador de progresso -->
+      <div class="steps-progress">
+        <div class="step-indicator active" data-step="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Dados</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-indicator" data-step="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Ingressos</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-indicator" data-step="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Pagamento</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flow">
+      <!-- PASSO 1 -->
+      <section class="card step-card active" data-step="1">
+        <div class="card-header">
+          <span class="card-step">Passo 1</span>
+          <h2 class="card-title">Dados do comprador</h2>
+        </div>
+        <div class="card-body">
+          <form id="buyer-form" novalidate>
+            <div class="field">
+              <label for="buyer-name">Nome completo *</label>
+              <input id="buyer-name" type="text" autocomplete="name" required />
+              <div class="field-error" data-error-for="buyer-name"></div>
+            </div>
+
+            <div class="field">
+              <label for="buyer-whatsapp">WhatsApp *</label>
+              <input
+                id="buyer-whatsapp"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel-national"
+                placeholder="(22)99785-1781"
+                required
+              />
+              <div class="field-hint">Usaremos o WhatsApp como principal canal de contato.</div>
+              <div class="field-error" data-error-for="buyer-whatsapp"></div>
+            </div>
+
+
+          </form>
+        </div>
+      </section>
+
+      <!-- PASSO 2 -->
+      <section class="card step-card disabled" data-step="2">
+        <div class="card-header">
+          <span class="card-step">Passo 2</span>
+          <h2 class="card-title">Ingressos e participantes</h2>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label class="qty-label">Quantos ingressos você deseja comprar?</label>
+            <div class="qty-selector">
+              <button type="button" class="qty-btn" id="qty-decrease">−</button>
+              <input
+                id="ticket-quantity"
+                type="number"
+                min="1"
+                max="10"
+                value="1"
+                inputmode="numeric"
+              />
+              <button type="button" class="qty-btn" id="qty-increase">+</button>
+            </div>
+            <div class="field-hint" id="ticket-quantity-text">
+              Você está comprando 1 ingresso
+            </div>
+          </div>
+
+          <div class="participants" id="participants-container">
+            <!-- Campos de participantes gerados via JS -->
+          </div>
+          <div class="field-error" data-error-for="participants"></div>
+        </div>
+      </section>
+
+      <!-- PASSO 3 -->
+      <section class="card step-card disabled" data-step="3">
+        <div class="card-header">
+          <span class="card-step">Passo 3</span>
+          <h2 class="card-title">Pagamento</h2>
+        </div>
+        <div class="card-body">
+          <div class="summary" id="purchase-summary">
+            <div class="summary-row">
+              <span>Evento</span>
+              <span id="summary-event-name">Festival TicketFlow Experience</span>
+            </div>
+            <div class="summary-row">
+              <span>Quantidade</span>
+              <span><span id="summary-qty">1</span> ingresso</span>
+            </div>
+
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span id="summary-total">R$ 120,00</span>
+            </div>
+          </div>
+
+          <button class="primary-btn" id="pay-pix-btn">
+            Pagar via PIX
+          </button>
+
+          <!-- Aviso permanente sobre expiração da reserva (sempre visível abaixo do botão) -->
+          <div id="pay-warning" style="font-size:12px;color:var(--text-muted);margin-top:8px;font-weight:600;">
+            Só clique em pagar se for efetuar o pagamento agora — após 20 minutos, a reserva pode expirar.
+          </div>
+
+          <div class="payment-status" id="payment-status" hidden>
+            <div class="status-line">
+              Status: <span id="payment-status-label">Aguardando confirmação do pagamento</span>
+            </div>
+          </div>
+
+          <div class="pix-section" id="pix-section" hidden>
+            <div class="pix-header"></div>
+
+            <div class="pix-body">
+              <label class="pix-label" for="pix-copy-code">Código copia e cola</label>
+              <textarea
+                id="pix-copy-code"
+                rows="4"
+                readonly
+                class="pix-copyarea"
+              ></textarea>
+
+              <div class="pix-actions">
+                <button type="button" class="secondary-btn" id="copy-pix-code-btn" aria-label="Copiar código PIX">
+                  Copiar código
+                </button>
+
+              </div>
+
+              <div class="pix-instructions" id="pix-instructions"></div>
+
+              <div class="pix-wait" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div class="success-section" id="success-section" hidden>
+            <h3 class="success-title">Pagamento aprovado!</h3>
+            <p class="success-text">
+              Seus ingressos foram gerados. Enviaremos a confirmação também pelo WhatsApp e e-mail.
+            </p>
+            <div class="tickets-list" id="tickets-list">
+              <!-- Ingressos com QR Code são gerados via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
